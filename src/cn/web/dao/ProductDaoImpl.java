@@ -11,15 +11,15 @@ public class ProductDaoImpl extends BaseDao<Product> {
 	public static void main(String[] args) {
 		ProductDaoImpl impl = new ProductDaoImpl();
 		Product product = new Product();
-		product.setName("南昌电信更新1");
+		product.setName("南昌电信保存1");
 		product.setRemark("江西南昌");
 		product.setPrice(200.5);
-		product.setId(4);
+		product.setId(7);
 		// impl.save(product);
 		// impl.delete(3);
 		// impl.update(product);
-		// impl.getById(4);
-		impl.queryByName("更新", "南昌");
+		impl.getById(5);
+		// impl.queryByName("保存", "南昌");
 
 	}
 
@@ -51,9 +51,10 @@ public class ProductDaoImpl extends BaseDao<Product> {
 				new Object[] { product.getName(), product.getRemark(), product.getPrice(), product.getId() });
 	}
 
-	public Product getById(int id) {
+	public List<Product> getById(int id) {
 		String sql = "select * from product where id = ?";
-		return super.getById(sql, id);
+		return super.queryByName(sql, new Object[] { id });
+		// return productlist.size() > 0 ? productlist.get(0) : null;
 	}
 
 	public List<Product> queryByName(String keyword1, String keyword2) {
