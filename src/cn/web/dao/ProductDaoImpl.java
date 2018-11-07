@@ -51,10 +51,10 @@ public class ProductDaoImpl extends BaseDao<Product> {
 				new Object[] { product.getName(), product.getRemark(), product.getPrice(), product.getId() });
 	}
 
-	public List<Product> getById(int id) {
+	public Product getById(int id) {
 		String sql = "select * from product where id = ?";
-		return super.queryByName(sql, new Object[] { id });
-		// return productlist.size() > 0 ? productlist.get(0) : null;
+		List<Product> productlist = super.queryByName(sql, new Object[] { id });
+		return productlist.size() > 0 ? productlist.get(0) : null;
 	}
 
 	public List<Product> queryByName(String keyword1, String keyword2) {

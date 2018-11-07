@@ -3,6 +3,7 @@ package cn.web.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JdbcUtils {
@@ -23,6 +24,10 @@ public class JdbcUtils {
 	}
 
 	public static void close(Connection conn, PreparedStatement pre) {
+		close(conn, pre, null);
+	}
+
+	public static void close(Connection conn, PreparedStatement pre, ResultSet rs) {
 
 		try {
 			if (pre != null && !pre.isClosed()) {
@@ -37,6 +42,14 @@ public class JdbcUtils {
 				}
 			} catch (SQLException e) {
 				throw new RuntimeException();
+			} finally {
+				try {
+					if (rs != null && !rs.isClosed()) {
+						rs.close();
+					}
+				} catch (SQLException e) {
+					throw new RuntimeException();
+				}
 			}
 		}
 	}

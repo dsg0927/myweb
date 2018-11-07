@@ -48,7 +48,7 @@ public abstract class BaseDao<T> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			JdbcUtils.close(conn, pre);
+			JdbcUtils.close(conn, pre, rs);
 		}
 	}
 
@@ -73,7 +73,7 @@ public abstract class BaseDao<T> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			JdbcUtils.close(conn, pre);
+			JdbcUtils.close(conn, pre, rs);
 		}
 
 	}
