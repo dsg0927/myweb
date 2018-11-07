@@ -1,8 +1,12 @@
 package cn.web.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import cn.web.model.Product;
 
-public class ProductDaoImpl extends BaseDao {
+public class ProductDaoImpl extends BaseDao<Product> {
 
 	public static void main(String[] args) {
 		ProductDaoImpl impl = new ProductDaoImpl();
@@ -13,8 +17,22 @@ public class ProductDaoImpl extends BaseDao {
 		product.setId(4);
 		// impl.save(product);
 		// impl.delete(3);
-		impl.update(product);
+		// impl.update(product);
+		// impl.getById(4);
+		impl.queryByName("更新", "南昌");
 
+	}
+
+	@Override
+	protected Product getRow(ResultSet rs) throws SQLException {
+		Product product = new Product();
+		product.setId(rs.getInt("id"));
+		product.setName(rs.getString("name"));
+		product.setPrice(rs.getDouble("price"));
+		product.setRemark(rs.getString("remark"));
+		product.setDate(rs.getDate("date"));
+		System.out.println(product);
+		return product;
 	}
 
 	public int save(Product product) {
@@ -31,6 +49,17 @@ public class ProductDaoImpl extends BaseDao {
 		String sql = "update product set name = ? , remark = ? , price = ? where id = ?";
 		return super.update(sql,
 				new Object[] { product.getName(), product.getRemark(), product.getPrice(), product.getId() });
+	}
+
+	public Product getById(int id) {
+		String sql = "select * from product where id = ?";
+		return super.getById(sql, id);
+	}
+
+	public List<Product> queryByName(String keyword1, String keyword2) {
+		String sql = "select * from product where name like ? and remark like ?";
+		return super.queryByName(sql, new Object[] { "%" + keyword1 + "%", "%" + keyword2 + "%" });
+
 	}
 
 }
