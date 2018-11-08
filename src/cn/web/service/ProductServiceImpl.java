@@ -25,8 +25,8 @@ public class ProductServiceImpl {
 		return productDao.getById(id);
 	}
 
-	public List<Product> queryByName(String keyword1, String keyword2) {
-		return productDao.queryByName(keyword1, keyword2);
+	public List<Product> queryByName(String keyword) {
+		return productDao.queryByName(keyword);
 
 	}
 

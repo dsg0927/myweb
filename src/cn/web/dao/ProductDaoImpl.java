@@ -18,7 +18,7 @@ public class ProductDaoImpl extends BaseDao<Product> {
 		// impl.update(product);
 //		Product product2 = impl.getById(5);
 //		System.out.println(product2);
-		List<Product> products = impl.queryByName("remark", "保存");
+		List<Product> products = impl.queryByName("保存");
 		for (Product temp : products) {
 			System.out.println(temp);
 		}
@@ -59,9 +59,9 @@ public class ProductDaoImpl extends BaseDao<Product> {
 		return productlist.size() > 0 ? productlist.get(0) : null;
 	}
 
-	public List<Product> queryByName(String keyword1, String keyword2) {
-		String sql = "select " + keyword1 + " from product where name like ?";
-		return super.queryByName(Product.class, sql, new Object[] { "%" + keyword2 + "%" });
+	public List<Product> queryByName(String keyword) {
+		String sql = "select * from product where name like ?";
+		return super.queryByName(Product.class, sql, new Object[] { "%" + keyword + "%" });
 
 	}
 
