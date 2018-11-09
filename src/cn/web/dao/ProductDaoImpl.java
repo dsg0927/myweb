@@ -2,27 +2,17 @@ package cn.web.dao;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import cn.web.model.Product;
 
-public class ProductDaoImpl extends BaseDao<Product> {
+public class ProductDaoImpl {
 
-	public static void main(String[] args) {
-		ProductDaoImpl impl = new ProductDaoImpl();
-//		Product product = new Product();
-//		product.setName("南昌电信保存1");
-//		product.setRemark("江西南昌");
-//		product.setPrice(200.54);
-//		product.setId(7);
-		// impl.save(product);
-		// impl.delete(3);
-		// impl.update(product);
-//		Product product2 = impl.getById(5);
-//		System.out.println(product2);
-		List<Product> products = impl.queryByName("保存");
-		for (Product temp : products) {
-			System.out.println(temp);
-		}
+	private JdbcTemplate jdbcTemplate;
 
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 //	@Override
@@ -39,29 +29,28 @@ public class ProductDaoImpl extends BaseDao<Product> {
 
 	public int save(Product product) {
 		String sql = "insert into product (name , price , remark) values (? , ? ,?)";
-		return super.update(sql, new Object[] { product.getName(), product.getPrice(), product.getRemark() });
+		return jdbcTemplate.update(sql, new Object[] { product.getName(), product.getPrice(), product.getRemark() });
 	}
 
 	public int delete(int id) {
 		String sql = "delete from product where id = ?";
-		return super.update(sql, new Object[] { id });
+		return jdbcTemplate.update(sql, id);
 	}
 
 	public int update(Product product) {
 		String sql = "update product set name = ? , remark = ? , price = ? where id = ?";
-		return super.update(sql,
+		return jdbcTemplate.update(sql,
 				new Object[] { product.getName(), product.getRemark(), product.getPrice(), product.getId() });
 	}
 
 	public Product getById(int id) {
 		String sql = "select * from product where id = ?";
-		List<Product> productlist = super.queryByName(Product.class, sql, new Object[] { id });
-		return productlist.size() > 0 ? productlist.get(0) : null;
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Product.class), id);
 	}
 
 	public List<Product> queryByName(String keyword) {
 		String sql = "select * from product where name like ?";
-		return super.queryByName(Product.class, sql, new Object[] { "%" + keyword + "%" });
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Product>(Product.class), "%" + keyword + "%");
 
 	}
 
