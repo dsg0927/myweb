@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import cn.web.model.Product;
 import cn.web.service.ProductServiceImpl;
@@ -22,7 +23,6 @@ public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	ProductServiceImpl productService = new ProductServiceImpl();
-	private String keyword;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -32,6 +32,7 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		HttpSession session = request.getSession();
 		String type = request.getParameter("type");
 		if (type.equals("save")) {
 			Product product = new Product();
@@ -44,7 +45,8 @@ public class ProductServlet extends HttpServlet {
 			productService.save(product);
 			response.sendRedirect("/myweb/query.jsp");
 		} else if (type.equals("query")) {
-			keyword = request.getParameter("keyword");
+			String keyword = request.getParameter("keyword");
+			session.setAttribute("keyword", keyword);
 			List<Product> products = productService.queryByName(keyword);
 			request.setAttribute("productList", products);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/query.jsp");
@@ -66,6 +68,7 @@ public class ProductServlet extends HttpServlet {
 			product.setPrice(new BigDecimal(price));
 			product.setRemark(remark);
 			productService.update(product);
+			String keyword = (String) session.getAttribute("keyword");
 			List<Product> products = productService.queryByName(keyword);
 			request.setAttribute("productList", products);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/query.jsp");
@@ -73,6 +76,7 @@ public class ProductServlet extends HttpServlet {
 		} else if (type.equals("delete")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			productService.delete(id);
+			String keyword = (String) session.getAttribute("keyword");
 			List<Product> products = productService.queryByName(keyword);
 			request.setAttribute("productList", products);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/query.jsp");
